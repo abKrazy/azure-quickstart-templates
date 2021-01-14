@@ -33,7 +33,7 @@
       "defaultValue": "[resourceGroup().location]",
       "metadata": {
         "description": "Location for all resources."
-      }
+      },
       "siteName": {
       "type": "string",
       "defaultValue": "",
