@@ -5,14 +5,14 @@
     "sku": {
       "type": "string",
       "metadata": {
-        "description": "wordpress site name"
+        "description": "Choose the SKU - F1 - Free, B1 - Basic, S1 - Standard"
       },
       "allowedValues": [
         "F1",
         "B1",
         "S1"
       ],
-      "defaultValue": "F1"
+      "defaultValue": "S1"
     },
     "repoUrl": {
       "type": "string",
@@ -34,11 +34,16 @@
       "metadata": {
         "description": "Location for all resources."
       }
+      "siteName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Enter a name for your app, which must be globally unique across all of Azure"
+      }
     }
   },
   "variables": {
-    "hostingPlanName": "[concat(uniquestring(resourceGroup().id),'hostingplan')]",
-    "siteName": "[concat(uniquestring(resourceGroup().id),'website')]"
+    "hostingPlanName": "[parameters('siteName'),'hostingplan')]"   
   },
   "resources": [
     {
@@ -54,11 +59,11 @@
     },
     {
       "type": "Microsoft.Web/sites",
-      "name": "[variables('siteName')]",
+      "name": "[parameters('siteName')]",
       "apiVersion": "2020-06-01",
       "location": "[parameters('location')]",
       "properties": {
-        "name": "[variables('siteName')]",
+        "name": "[parameters('siteName')]",
         "serverFarmId": "[variables('hostingPlanName')]",
         "siteConfig": {
           "localMySqlEnabled": true,
@@ -93,7 +98,7 @@
             "IsManualIntegration": true
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('siteName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
           ]
         },
         {
@@ -104,7 +109,7 @@
             "phpVersion": "7.0"
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Web/sites/', variables('siteName'))]"
+            "[resourceId('Microsoft.Web/sites/', parameters('siteName'))]"
           ]
         }
       ],
